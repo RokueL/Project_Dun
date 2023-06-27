@@ -5,8 +5,10 @@ using UnityEngine.AI;
 
 public class EnemyControl : MonoBehaviour
 {
+    public float HP = 100f;
+
     public float Find_Distance = 5f;
-    public float Attack_Distance = 2f;
+    float Attack_Distance = 1.8f;
 
     public float enemySpeed = 2f;
     
@@ -62,7 +64,7 @@ public class EnemyControl : MonoBehaviour
                 Chase();
                 break;
             case State.Attack:
-                if (isAttack == false)
+                if (!isAttack)
                 {
                     StartCoroutine(Attack());
                 }
@@ -75,13 +77,13 @@ public class EnemyControl : MonoBehaviour
 
     IEnumerator Attack()
     {
-        agent.Stop();
-        isAttack = true;
         Debug.Log("공격모션");
+        isAttack = true;
+        agent.Stop();
         yield return new WaitForSeconds(2f);
         Debug.Log("공격끝");
-        isAttack = false;
         agent.Resume();
+        isAttack = false;
         state = State.Patrol;
     }
 
@@ -94,7 +96,7 @@ public class EnemyControl : MonoBehaviour
 
             float distance = Vector3.Distance(target.transform.position, transform.position);
 
-            if(distance <= Attack_Distance)
+            if(distance <= 2)
             {
                 state = State.Attack;
             }
